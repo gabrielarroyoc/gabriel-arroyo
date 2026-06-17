@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARROYO.DEV ▮
 
-## Getting Started
+> **Portfolio de front-end com personalidade.**
+> Interfaces que parecem boas, carregam rápido e vendem o valor do produto.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+┌─────────────────────────────────────────────┐
+│  Next.js 16  ·  React 19  ·  TypeScript 5   │
+│  Tailwind 4  ·  Framer Motion  ·  i18n      │
+└─────────────────────────────────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ▶ RODAR O PROJETO
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev
+```
 
-## Learn More
+Abra **http://localhost:3000** — o proxy detecta o idioma do browser e redireciona automaticamente.
 
-To learn more about Next.js, take a look at the following resources:
+| Rota | Idioma |
+|---|---|
+| `/pt` | 🇧🇷 Português |
+| `/en` | 🇺🇸 English |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ▮ STACK
 
-## Deploy on Vercel
+```
+REACT         → componentes e estado
+NEXT.JS 16    → app router, server components, proxy.ts
+TYPESCRIPT    → tipagem em tudo
+TAILWIND 4    → design system com tokens custom
+FRAMER MOTION → animações de entrada e hover
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ▮ ESTRUTURA
+
+```
+src/
+├── app/
+│   └── [lang]/
+│       ├── layout.tsx        ← html lang dinâmico + metadata
+│       ├── page.tsx          ← server component (carrega dict)
+│       └── dictionaries.ts   ← loader server-only
+├── components/
+│   ├── PortfolioClient.tsx   ← toda a UI + animações
+│   ├── LangSwitcher.tsx      ← botão PT | EN
+│   ├── retroui/              ← Badge, Button, Card, Text
+│   └── ui/                   ← ícones animados
+├── dictionaries/
+│   ├── pt.json               ← strings em português
+│   └── en.json               ← strings em inglês
+└── proxy.ts                  ← auto-redirect por Accept-Language
+```
+
+---
+
+## ▮ I18N
+
+A internacionalização é **100% nativa** — sem bibliotecas externas.
+
+- `proxy.ts` lê o header `Accept-Language` e redireciona `/` → `/pt` ou `/en`
+- Dicionários são JSON simples carregados em Server Components
+- O `LangSwitcher` troca o idioma mantendo a rota
+
+---
+
+## ▮ ANIMAÇÕES
+
+Todas feitas com **Framer Motion** (`motion/react`):
+
+- **Hero** — stagger em cascata nos elementos de entrada
+- **Scroll** — `useInView` com `once: true` em cada seção
+- **Stack cards** — hover dispara `startAnimation()` nos ícones via `ref`
+- **Tag flutuante** — loop infinito `y: [0, -6, 0]`
+- **Nav** — slide-down ao montar
+
+---
+
+## ▮ DESIGN
+
+Estilo **neobrutalist**:
+
+```
+border: 2px solid #111
+shadow: 8px 8px 0 #111     ← shadow-brutal
+colors: cyan · yellow · pink · green · red · blue (pop palette)
+font:   Arial Black / Impact (headings)
+        Inter (body)
+```
+
+---
+
+## ▶ BUILD
+
+```bash
+pnpm build
+pnpm start
+```
+
+---
+
+**arroyo.dev** — feito com critério.
