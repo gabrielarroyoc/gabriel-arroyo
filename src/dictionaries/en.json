@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "arroyo.dev | Front-end Developer",
+    "description": "Portfolio of Arroyo, front-end developer specializing in React, Next.js, TypeScript, product interfaces and design systems."
+  },
+  "nav": {
+    "logo": "arroyo.dev",
+    "valor": "Value",
+    "stack": "Stack",
+    "projetos": "Projects",
+    "contato": "Contact",
+    "contratar": "Hire me"
+  },
+  "hero": {
+    "badge1": "Front-end Developer",
+    "badge2": "React / Next.js / TypeScript",
+    "h1": "Interfaces that look great, load fast and sell your product's value.",
+    "sub": "I'm Arroyo, a product-minded front-end developer. I deliver polished, responsive and consistent digital experiences — combining design, clean code and execution criteria.",
+    "cta_primary": "Let's build something great",
+    "cta_secondary": "See how I work",
+    "floating_tag": "UI with personality",
+    "cockpit_title": "Front-end cockpit",
+    "cockpit_ui_title": "+UI",
+    "cockpit_ui_desc": "Components designed to evolve alongside the product.",
+    "cockpit_a11y_title": "A11Y",
+    "cockpit_a11y_desc": "Inclusive, navigable and clear layouts on any screen.",
+    "cockpit_ship_title": "Ship quality",
+    "cockpit_ship_desc": "From prototype to deploy with polish, performance and maintainability."
+  },
+  "valor": {
+    "h2": "I come in to make the interface stronger.",
+    "sub": "I'm not just someone who replicates screens. I connect design, engineering and business to create experiences that build trust.",
+    "strengths": [
+      "I turn Figma into living, responsive interfaces ready to scale.",
+      "I build reusable components with TypeScript, Tailwind and design tokens.",
+      "I care about performance, accessibility and micro-interactions from day one.",
+      "I think like a product person: clarity, conversion, maintainability and user experience."
+    ]
+  },
+  "stack": {
+    "badge": "Main stack",
+    "h2": "Tools to ship product, not just pretty screens.",
+    "sub": "I choose technology for impact: speed to build, safety to maintain, and a final experience the user can feel.",
+    "card_desc": "I use {name} to turn design intent into a usable, consistent experience ready to evolve.",
+    "accessibility_label": "Accessibility"
+  },
+  "projetos": {
+    "badge": "How I create impact",
+    "h2": "Types of delivery I'm especially strong at.",
+    "items": [
+      {
+        "title": "Landing pages that sell",
+        "description": "Pages with clear narratives, strong CTAs and a structure built for conversion without sacrificing performance.",
+        "tags": ["Next.js", "SEO", "UI polish"]
+      },
+      {
+        "title": "Dashboards & SaaS products",
+        "description": "Dense, organized and fast product interfaces for daily use, with states, filters and visual hierarchy.",
+        "tags": ["React", "Design System", "A11y"]
+      },
+      {
+        "title": "Actionable design systems",
+        "description": "Components, tokens and patterns that make the team faster without stifling product creativity.",
+        "tags": ["TypeScript", "Tailwind", "DX"]
+      }
+    ]
+  },
+  "processo": {
+    "items": [
+      {
+        "step": "01",
+        "title": "I read the product",
+        "copy": "I understand the audience, screen objective, usage context and technical constraints before opening the editor."
+      },
+      {
+        "step": "02",
+        "title": "I design with code",
+        "copy": "I create layouts faithful to the design, but with responsiveness, states and components already thought out for production."
+      },
+      {
+        "step": "03",
+        "title": "I deliver with care",
+        "copy": "I validate build, responsiveness, basic accessibility and finishing details that separate a demo from a real product."
+      }
+    ]
+  },
+  "contato": {
+    "badge": "Available for projects",
+    "h2": "Need a front-end dev to elevate your experience?",
+    "sub": "I help turn ideas, layouts and flows into interfaces that radiate professionalism from the very first click.",
+    "card_title": "Let's talk.",
+    "card_desc": "Reach out to build a landing page, web product, dashboard or design system with personality and solid technical foundations.",
+    "github_label": "Open GitHub",
+    "linkedin_label": "Open LinkedIn"
+  }
+}

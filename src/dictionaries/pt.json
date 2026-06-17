@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "arroyo.dev | Front-end Developer",
+    "description": "Portfolio de Arroyo, front-end developer especializado em React, Next.js, TypeScript, interfaces de produto e design systems."
+  },
+  "nav": {
+    "logo": "arroyo.dev",
+    "valor": "Valor",
+    "stack": "Stack",
+    "projetos": "Projetos",
+    "contato": "Contato",
+    "contratar": "Contratar"
+  },
+  "hero": {
+    "badge1": "Front-end Developer",
+    "badge2": "React / Next.js / TypeScript",
+    "h1": "Interfaces que parecem boas, carregam rápido e vendem o valor do produto.",
+    "sub": "Sou Arroyo, front-end developer com olhar de produto. Entrego experiências digitais polidas, responsivas e consistentes, unindo design, código limpo e critério de execução.",
+    "cta_primary": "Vamos construir algo bom",
+    "cta_secondary": "Ver meu jeito de trabalhar",
+    "floating_tag": "UI com personalidade",
+    "cockpit_title": "Front-end cockpit",
+    "cockpit_ui_title": "+UI",
+    "cockpit_ui_desc": "Componentes pensados para evoluir junto com o produto.",
+    "cockpit_a11y_title": "A11Y",
+    "cockpit_a11y_desc": "Layouts inclusivos, navegáveis e claros em qualquer tela.",
+    "cockpit_ship_title": "Ship quality",
+    "cockpit_ship_desc": "Do protótipo ao deploy com acabamento, performance e manutenibilidade."
+  },
+  "valor": {
+    "h2": "Eu entro para deixar a interface mais forte.",
+    "sub": "Não sou apenas alguém que replica telas. Eu conecto design, engenharia e negócio para criar experiências que passam confiança.",
+    "strengths": [
+      "Transformo Figma em interfaces vivas, responsivas e prontas para escala.",
+      "Construo componentes reutilizáveis com TypeScript, Tailwind e design tokens.",
+      "Cuido de performance, acessibilidade e microinterações desde a primeira versão.",
+      "Penso como produto: clareza, conversão, manutenção e experiência de uso."
+    ]
+  },
+  "stack": {
+    "badge": "Stack principal",
+    "h2": "Ferramentas para entregar produto, não só tela bonita.",
+    "sub": "Escolho tecnologia pelo impacto: velocidade para construir, segurança para manter e uma experiência final que o usuário sente.",
+    "card_desc": "Uso {name} para transformar intenção de design em experiência usável, consistente e pronta para evoluir.",
+    "accessibility_label": "Acessibilidade"
+  },
+  "projetos": {
+    "badge": "Como eu gero impacto",
+    "h2": "Tipos de entrega em que eu sou especialmente forte.",
+    "items": [
+      {
+        "title": "Landing pages que vendem",
+        "description": "Páginas com narrativa clara, CTAs fortes e estrutura pensada para conversão sem sacrificar performance.",
+        "tags": ["Next.js", "SEO", "UI polish"]
+      },
+      {
+        "title": "Dashboards e produtos SaaS",
+        "description": "Interfaces de produto densas, organizadas e rápidas para uso diário, com estados, filtros e hierarquia visual.",
+        "tags": ["React", "Design System", "A11y"]
+      },
+      {
+        "title": "Design systems aplicáveis",
+        "description": "Componentes, tokens e padrões que deixam a equipe mais rápida sem engessar a criatividade do produto.",
+        "tags": ["TypeScript", "Tailwind", "DX"]
+      }
+    ]
+  },
+  "processo": {
+    "items": [
+      {
+        "step": "01",
+        "title": "Leio o produto",
+        "copy": "Entendo o público, objetivo da tela, contexto de uso e restrições técnicas antes de abrir o editor."
+      },
+      {
+        "step": "02",
+        "title": "Desenho com código",
+        "copy": "Crio layouts fiéis ao design, mas com responsividade, estados e componentes já pensados para produção."
+      },
+      {
+        "step": "03",
+        "title": "Entrego com critério",
+        "copy": "Valido build, responsividade, acessibilidade básica e detalhes de acabamento que separam demo de produto."
+      }
+    ]
+  },
+  "contato": {
+    "badge": "Disponível para projetos",
+    "h2": "Precisa de um front-end que suba o nível da experiência?",
+    "sub": "Eu ajudo a transformar ideias, layouts e fluxos em interfaces que passam profissionalismo desde o primeiro clique.",
+    "card_title": "Vamos conversar.",
+    "card_desc": "Me chame para criar uma landing, produto web, dashboard ou design system com personalidade e base técnica sólida.",
+    "github_label": "Abrir GitHub",
+    "linkedin_label": "Abrir LinkedIn"
+  }
+}
