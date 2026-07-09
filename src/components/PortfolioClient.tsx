@@ -1,21 +1,22 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import type { AnimatedIconHandle } from "@/components/ui/types";
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 
 import AccessibilityIcon from "@/components/ui/accessibility-icon";
 import ArrowNarrowRightIcon from "@/components/ui/arrow-narrow-right-icon";
-import BrandNextjsIcon from "@/components/ui/brand-nextjs-icon";
 import BrandReactIcon from "@/components/ui/brand-react-icon";
 import CodeXmlIcon from "@/components/ui/code-xml-icon";
 import CpuIcon from "@/components/ui/cpu-icon";
-import FigmaIcon from "@/components/ui/figma-icon";
 import GithubIcon from "@/components/ui/github-icon";
 import GmailIcon from "@/components/ui/gmail-icon";
+import LayersIcon from "@/components/ui/layers-icon";
 import LinkedinIcon from "@/components/ui/linkedin-icon";
+import SparklesIcon from "@/components/ui/sparkles-icon";
 import TypescriptIcon from "@/components/ui/typescript-icon";
+import WifiIcon from "@/components/ui/wifi-icon";
 
 import { Badge } from "@/components/retroui/Badge";
 import { Button } from "@/components/retroui/Button";
@@ -46,11 +47,11 @@ const staggerContainer = (stagger = 0.1, delay = 0) => ({
 
 const stackIcons = [
   { key: "React", icon: BrandReactIcon, tone: "bg-cyan-pop" },
-  { key: "Next.js", icon: BrandNextjsIcon, tone: "bg-ink text-paper" },
   { key: "TypeScript", icon: TypescriptIcon, tone: "bg-blue-pop" },
-  { key: "Figma", icon: FigmaIcon, tone: "bg-pink-pop" },
+  { key: "Vite", icon: CodeXmlIcon, tone: "bg-yellow-pop" },
+  { key: "Zustand", icon: LayersIcon, tone: "bg-pink-pop" },
   { key: "accessibility", icon: AccessibilityIcon, tone: "bg-green-pop" },
-  { key: "Performance", icon: CpuIcon, tone: "bg-yellow-pop" },
+  { key: "Performance", icon: CpuIcon, tone: "bg-red-pop" },
 ];
 
 // ─── Scroll Section Wrapper ──────────────────────────────────────────────────
@@ -127,6 +128,28 @@ function StackCard({
   );
 }
 
+// ─── FAQ Item Component ──────────────────────────────────────────────────────
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div
+      className="border-2 border-ink bg-paper text-ink shadow-brutal-sm cursor-pointer transition-all"
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="flex items-center justify-between gap-4 p-5 font-bold text-base sm:text-lg select-none">
+        <span className="min-w-0">{q}</span>
+        <span className="font-head text-2xl shrink-0">{isOpen ? "−" : "+"}</span>
+      </div>
+      {isOpen && (
+        <div className="border-t-2 border-ink bg-background p-5 font-semibold leading-7 text-ink/80">
+          {a}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Client Component ───────────────────────────────────────────────────
 
 export default function PortfolioClient({
@@ -153,7 +176,7 @@ export default function PortfolioClient({
   const stackItems = stackIcons.map((s) => {
     const name =
       s.key === "accessibility" ? dict.stack.accessibility_label : s.key;
-    const desc = dict.stack.card_desc.replace("{name}", name);
+    const desc = (dict.stack.cards as Record<string, string>)[s.key] ?? "";
     return { ...s, name, desc };
   });
 
@@ -207,13 +230,13 @@ export default function PortfolioClient({
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-18 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:py-20">
           {/* Left column */}
           <motion.div
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start"
             initial="hidden"
             animate="visible"
             variants={staggerContainer(0.1, 0.15)}
           >
             <motion.div
-              className="mb-5 flex flex-wrap items-center gap-3"
+              className="mb-5 flex flex-wrap items-center gap-3 justify-center lg:justify-start"
               variants={fadeUp}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -231,7 +254,7 @@ export default function PortfolioClient({
             >
               <Text
                 as="h1"
-                className="max-w-4xl text-5xl leading-[0.95] sm:text-6xl lg:text-7xl"
+                className="max-w-4xl text-4xl leading-[0.95] sm:text-5xl lg:text-6xl"
               >
                 {dict.hero.h1}
               </Text>
@@ -246,7 +269,7 @@ export default function PortfolioClient({
             </motion.p>
 
             <motion.div
-              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              className="mt-8 flex flex-col gap-3 lg:flex-row w-full lg:w-auto"
               variants={fadeUp}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -302,8 +325,8 @@ export default function PortfolioClient({
                   variants={fadeUp}
                   transition={{ duration: 0.45 }}
                 >
-                  <CodeXmlIcon size={34} />
-                  <p className="mt-4 font-head text-3xl font-black">
+                  <WifiIcon size={34} />
+                  <p className="mt-4 font-head text-2xl font-black sm:text-3xl">
                     {dict.hero.cockpit_ui_title}
                   </p>
                   <p className="mt-2 text-sm font-semibold">
@@ -316,8 +339,8 @@ export default function PortfolioClient({
                   variants={fadeUp}
                   transition={{ duration: 0.45 }}
                 >
-                  <AccessibilityIcon size={34} />
-                  <p className="mt-4 font-head text-3xl font-black">
+                  <LayersIcon size={34} />
+                  <p className="mt-4 font-head text-2xl font-black sm:text-3xl">
                     {dict.hero.cockpit_a11y_title}
                   </p>
                   <p className="mt-2 text-sm font-semibold">
@@ -339,7 +362,7 @@ export default function PortfolioClient({
                         {dict.hero.cockpit_ship_desc}
                       </p>
                     </div>
-                    <CpuIcon size={42} />
+                    <SparklesIcon size={42} />
                   </div>
                 </motion.div>
               </div>
@@ -367,10 +390,28 @@ export default function PortfolioClient({
         </div>
       </section>
 
+      {/* ── Stats Bar ── */}
+      <section className="border-b-2 border-ink bg-yellow-pop">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {dict.stats.items.map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center">
+                <span className="font-head text-4xl font-black text-ink md:text-5xl">
+                  {stat.value}
+                </span>
+                <span className="mt-1 text-sm font-bold text-ink/80 uppercase">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Valor ── */}
       <section id="valor" className="border-b-2 border-ink bg-cyan-pop">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
-          <ScrollReveal>
+          <ScrollReveal className="text-center lg:text-left">
             <Text as="h2" className="text-4xl sm:text-5xl">
               {dict.valor.h2}
             </Text>
@@ -404,15 +445,15 @@ export default function PortfolioClient({
       {/* ── Stack ── */}
       <section id="stack" className="border-b-2 border-ink bg-paper">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
+          <ScrollReveal className="text-center lg:text-left">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="flex flex-col items-center lg:items-start">
                 <Badge variant="solid">{dict.stack.badge}</Badge>
                 <Text as="h2" className="mt-4 text-4xl sm:text-5xl">
                   {dict.stack.h2}
                 </Text>
               </div>
-              <p className="max-w-xl text-base font-semibold leading-7 text-ink/75">
+              <p className="mx-auto max-w-xl text-base font-semibold leading-7 text-ink/75 lg:mx-0">
                 {dict.stack.sub}
               </p>
             </div>
@@ -436,8 +477,8 @@ export default function PortfolioClient({
       {/* ── Projetos ── */}
       <section id="projetos" className="border-b-2 border-ink bg-green-pop">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="max-w-3xl">
+          <ScrollReveal className="text-center lg:text-left">
+            <div className="mx-auto lg:mx-0 max-w-3xl flex flex-col items-center lg:items-start">
               <Badge variant="outline" className="bg-paper">
                 {dict.projetos.badge}
               </Badge>
@@ -454,32 +495,48 @@ export default function PortfolioClient({
             animate={projectsInView ? "visible" : "hidden"}
             variants={staggerContainer(0.12, 0.1)}
           >
-            {dict.projetos.items.map((project) => (
-              <motion.div
-                key={project.title}
-                variants={fadeUp}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -4, transition: { duration: 0.18 } }}
-              >
-                <Card className="block w-full bg-paper">
-                  <Card.Header>
-                    <Card.Title className="text-2xl font-black">
-                      {project.title}
-                    </Card.Title>
-                    <Card.Description className="text-base font-semibold leading-7 text-ink/74">
-                      {project.description}
-                    </Card.Description>
-                  </Card.Header>
-                  <Card.Content className="flex flex-wrap gap-2 pt-0">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} size="sm" variant="surface">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </Card.Content>
-                </Card>
-              </motion.div>
-            ))}
+            {dict.projetos.items.map((project) => {
+              const url = (project as Record<string, unknown>).url as
+                | string
+                | undefined;
+              return (
+                <motion.div
+                  key={project.title}
+                  variants={fadeUp}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ y: -4, transition: { duration: 0.18 } }}
+                >
+                  <Card className="flex h-full flex-col overflow-hidden bg-paper">
+                    <Card.Header>
+                      <Card.Title className="text-xl font-black sm:text-2xl break-words">
+                        {project.title}
+                      </Card.Title>
+                      <Card.Description className="text-sm font-semibold leading-7 text-ink/74 sm:text-base">
+                        {project.description}
+                      </Card.Description>
+                    </Card.Header>
+                    <Card.Content className="mt-auto flex flex-wrap items-center gap-2 pt-0">
+                      {project.tags.map((tag) => (
+                        <Badge key={tag} size="sm" variant="surface">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {url && (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ml-auto inline-flex items-center gap-1 border-2 border-ink bg-yellow-pop px-3 py-1 text-sm font-black shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                        >
+                          Ver projeto
+                          <ArrowNarrowRightIcon size={16} />
+                        </a>
+                      )}
+                    </Card.Content>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -515,6 +572,28 @@ export default function PortfolioClient({
         </motion.div>
       </section>
 
+      {/* ── FAQ ── */}
+      <section className="border-b-2 border-ink bg-pink-pop">
+        <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
+          <ScrollReveal className="text-center lg:text-left mb-10">
+            <div className="mx-auto lg:mx-0 max-w-3xl flex flex-col items-center lg:items-start">
+              <Badge variant="solid" className="bg-ink text-paper">
+                {dict.faq.badge}
+              </Badge>
+              <Text as="h2" className="mt-4 text-4xl sm:text-5xl">
+                {dict.faq.h2}
+              </Text>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid gap-4">
+            {dict.faq.questions.map((item, idx) => (
+              <FAQItem key={idx} q={item.q} a={item.a} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Contato ── */}
       <section id="contato" className="bg-ink text-paper">
         <motion.div
@@ -527,6 +606,7 @@ export default function PortfolioClient({
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <Badge className="bg-yellow-pop text-ink">{dict.contato.badge}</Badge>
             <Text as="h2" className="mt-5 max-w-3xl text-4xl sm:text-6xl">
@@ -555,13 +635,15 @@ export default function PortfolioClient({
                 </Card.Description>
               </Card.Header>
               <Card.Content className="grid gap-3 pt-0">
-                <a className="contact-link" href="mailto:contato@arroyo.dev">
-                  <GmailIcon size={24} />
-                  contato@arroyo.dev
+                <a className="contact-link overflow-hidden" href="mailto:gabrielarroyoc18@gmail.com">
+                  <GmailIcon size={24} className="shrink-0" />
+                  <span className="truncate">gabrielarroyoc18@gmail.com</span>
                 </a>
                 <a
                   className="contact-link"
-                  href="#"
+                  href="https://github.com/gabrielarroyoc"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={dict.contato.github_label}
                 >
                   <GithubIcon size={24} />
@@ -569,7 +651,9 @@ export default function PortfolioClient({
                 </a>
                 <a
                   className="contact-link"
-                  href="#"
+                  href="https://www.linkedin.com/in/gabriel-arroyo-800312183/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={dict.contato.linkedin_label}
                 >
                   <LinkedinIcon size={24} />
