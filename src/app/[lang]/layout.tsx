@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import {
   getDictionary,
@@ -6,6 +7,16 @@ import {
   locales,
   type Locale,
 } from "./dictionaries";
+
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+});
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -37,7 +48,7 @@ export default async function LangLayout({
   const locale: Locale = hasLocale(lang) ? lang : "pt";
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>{children}</body>
     </html>
   );
