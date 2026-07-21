@@ -1,134 +1,50 @@
 {
   "meta": {
-    "title": "Gabriel Arroyo | Front-End Developer",
-    "description": "Portfolio of Gabriel Arroyo, front-end developer specializing in React, TypeScript, and high-performance web applications."
+    "title": "Gabriel Arroyo | Front-End",
+    "description": "Gabriel Arroyo — front-end developer. React, TypeScript, and product-focused interfaces."
   },
-  "nav": {
-    "logo": "arroyo.dev",
-    "valor": "Differentiators",
+  "name": "Gabriel Arroyo",
+  "brand": "arroyo.dev",
+  "role": "Front-End Developer",
+  "bio": [
+    "I build resilient, fast interfaces focused on product experience — mainly with React and TypeScript.",
+    "I don’t stop at translating layouts. I understand business requirements, model client-side data, and ship clean, typed, production-ready code."
+  ],
+  "sections": {
+    "projects": "Projects",
     "stack": "Stack",
-    "projetos": "Projects",
-    "contato": "Contact",
-    "contratar": "Talk to Gabriel"
+    "connect": "Connect"
   },
-  "hero": {
-    "badge1": "Front-End Developer",
-    "badge2": "React / TypeScript / SaaS",
-    "h1": "Building resilient, high-speed, product-focused web interfaces.",
-    "sub": "Specializing in React and TypeScript, I build scalable web applications from scratch. I align clean code, solid architecture, and product sense to deliver production-ready, high-performance solutions.",
-    "cta_primary": "Let's work together",
-    "cta_secondary": "View practical projects",
-    "floating_tag": "Performance & UX Focus",
-    "cockpit_title": "Front-End Cockpit",
-    "cockpit_ui_title": "Realtime SaaS",
-    "cockpit_ui_desc": "Hands-on experience with WebSockets, Supabase Realtime, and complex state synchronization.",
-    "cockpit_a11y_title": "Componentization",
-    "cockpit_a11y_desc": "Creating modular, strongly-typed, and highly accessible design systems.",
-    "cockpit_ship_title": "Clean Code",
-    "cockpit_ship_desc": "Decoupled architecture, separation of concerns, and ease of maintainability."
-  },
-  "stats": {
-    "items": [
-      { "value": "SaaS", "label": "Architected from Scratch" },
-      { "value": "Realtime", "label": "Synchronized WebSockets" },
-      { "value": "Zero Bugs", "label": "Rigorous Technical Debugging" },
-      { "value": "100%", "label": "Typed & Accessible Components" }
-    ]
-  },
-  "valor": {
-    "h2": "Delivering technical autonomy and product-minded decisions.",
-    "sub": "I don't limit myself to translating Figma files into code. I understand business constraints, model client-side data efficiently, and ensure applications remain solid under stress.",
-    "strengths": [
-      "Modular global and local state management with Zustand and React Hook Form.",
-      "Performance optimization via code splitting, lazy loading, and rendering control.",
-      "Robust client security and integration with REST APIs, Supabase, and RLS rules.",
-      "Complex debugging by mapping component lifecycles and analyzing network state."
-    ]
-  },
-  "stack": {
-    "badge": "Tech Stack",
-    "h2": "Modern technologies for scalable products.",
-    "sub": "I choose tools that provide type safety at compile time, high browser performance, and long-term code maintainability.",
-    "cards": {
-      "React": "The foundation of every interface: declarative components, custom hooks, and fine-grained rendering control.",
-      "TypeScript": "Strict typing that catches bugs at compile time and documents contracts between components.",
-      "Vite": "Ultra-fast builds with instant HMR, automatic code splitting, and lean production configuration.",
-      "Zustand": "Lightweight and predictable global state management with optimized selectors and zero boilerplate.",
-      "accessibility": "Semantic HTML, keyboard navigation, and proper contrast baked in from the very first component.",
-      "Performance": "Lazy loading, strategic memoization, and bottleneck profiling to ensure smooth UX on any device."
+  "projects": [
+    {
+      "title": "Arkhiveon",
+      "description": "Realtime collaborative SaaS for RPG campaigns — multi-user sync, complex state, and RLS.",
+      "url": "https://arkhiveon.com.br"
     },
-    "accessibility_label": "Accessibility"
-  },
-  "projetos": {
-    "badge": "Portfolio in Action",
-    "h2": "Real-world applications built from end-to-end.",
-    "items": [
-      {
-        "title": "Arkhiveon — Realtime Collaborative SaaS",
-        "description": "Real-time SaaS platform for managing tabletop RPG campaigns. Implemented multi-user state synchronization using Supabase Realtime and WebSockets, complex state management with Zustand, dynamic forms with validation, and granular security via PostgreSQL RLS.",
-        "tags": ["React", "TypeScript", "Zustand", "Supabase Realtime", "PostgreSQL RLS", "WebSockets"],
-        "url": "https://arkhiveon.com.br"
-      },
-      {
-        "title": "Modular & Accessible Design System",
-        "description": "Developing a library of reusable components focused on accessibility (A11y), clean HTML semantics, and styling flexibility using Tailwind CSS. Engineered design token integration for visual consistency across product features.",
-        "tags": ["React", "TypeScript", "Tailwind CSS", "A11y", "Componentization"]
-      },
-      {
-        "title": "High-Performance Dashboards",
-        "description": "Dense data interfaces integrated with REST APIs, designed for fast load times and fluid UX. Applied performance strategies including Lazy Loading, Code Splitting, and targeted memoization for absolute render control.",
-        "tags": ["React", "TypeScript", "Vite", "Lazy Loading", "Performance"]
-      }
-    ]
-  },
-  "processo": {
-    "items": [
-      {
-        "step": "01",
-        "title": "Analysis & Requirements",
-        "copy": "I align on business logic, user flows, and technical requirements before writing a single line of code."
-      },
-      {
-        "step": "02",
-        "title": "Modeling & Modularity",
-        "copy": "I structure state management and write highly modular components with strict typing to prevent regressions."
-      },
-      {
-        "step": "03",
-        "title": "Validation & Optimization",
-        "copy": "I ensure quick load times with code splitting, audit accessibility, and clean up logs for production-ready deploys."
-      }
-    ]
-  },
-  "faq": {
-    "badge": "Frequently Asked Questions",
-    "h2": "Quick answers about my technical profile.",
-    "questions": [
-      {
-        "q": "What is your approach to code quality?",
-        "a": "I write clean code by maintaining strict separation of concerns, strong TypeScript definitions, and reusable component libraries. My components have single responsibilities and isolated state, making them easy to test and maintain."
-      },
-      {
-        "q": "How do you handle performance optimization in React applications?",
-        "a": "I apply Code Splitting and Lazy Loading to minimize initial bundle size. I prevent wasted re-renders by keeping state local where possible, writing optimized Zustand selectors, and using useMemo/useCallback selectively based on actual performance profiling."
-      },
-      {
-        "q": "How do you investigate and solve complex bugs?",
-        "a": "I treat debugging scientifically: reproducing the bug in isolation, inspecting local and global states, analyzing network logs, and tracing component lifecycles. I focus on resolving the root cause rather than applying a hotfix."
-      },
-      {
-        "q": "Do you prefer working alone or in a team?",
-        "a": "I value constant learning and team collaboration. I appreciate constructive code reviews, discussing architectural patterns, and collaborating with designers and PMs to ensure the final product meets both visual and business goals."
-      }
-    ]
-  },
-  "contato": {
-    "badge": "Open for Opportunities",
-    "h2": "Looking for a front-end dev focused on shipping high-caliber code?",
-    "sub": "I am ready to join your team bringing technical autonomy, rapid learning, and clean code practices.",
-    "card_title": "Get in touch.",
-    "card_desc": "Let's talk about how I can help build or scale your SaaS product, dashboard, or design system.",
-    "github_label": "Open GitHub",
-    "linkedin_label": "Open LinkedIn"
+    {
+      "title": "Modular design system",
+      "description": "Typed, accessible component library with design tokens and Tailwind CSS."
+    },
+    {
+      "title": "High-performance dashboards",
+      "description": "Dense REST-backed interfaces with lazy loading and fine-grained render control."
+    }
+  ],
+  "stack": [
+    "React",
+    "TypeScript",
+    "Next.js",
+    "Vite",
+    "Zustand",
+    "Tailwind CSS",
+    "Supabase"
+  ],
+  "connect": {
+    "email": "gabrielarroyoc18@gmail.com",
+    "emailLabel": "Email",
+    "github": "https://github.com/gabrielarroyoc",
+    "githubLabel": "GitHub",
+    "linkedin": "https://www.linkedin.com/in/gabriel-arroyo-800312183/",
+    "linkedinLabel": "LinkedIn"
   }
 }

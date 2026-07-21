@@ -1,668 +1,112 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView } from "motion/react";
-import type { AnimatedIconHandle } from "@/components/ui/types";
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
-
-import AccessibilityIcon from "@/components/ui/accessibility-icon";
-import ArrowNarrowRightIcon from "@/components/ui/arrow-narrow-right-icon";
-import BrandReactIcon from "@/components/ui/brand-react-icon";
-import CodeXmlIcon from "@/components/ui/code-xml-icon";
-import CpuIcon from "@/components/ui/cpu-icon";
-import GithubIcon from "@/components/ui/github-icon";
-import GmailIcon from "@/components/ui/gmail-icon";
-import LayersIcon from "@/components/ui/layers-icon";
-import LinkedinIcon from "@/components/ui/linkedin-icon";
-import SparklesIcon from "@/components/ui/sparkles-icon";
-import TypescriptIcon from "@/components/ui/typescript-icon";
-import WifiIcon from "@/components/ui/wifi-icon";
-
-import { Badge } from "@/components/retroui/Badge";
-import { Button } from "@/components/retroui/Button";
-import { Card } from "@/components/retroui/Card";
-import { Text } from "@/components/retroui/Text";
 import LangSwitcher from "@/components/LangSwitcher";
 
-// ─── Animation Variants ────────────────────────────────────────────────────
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.93 },
-  visible: { opacity: 1, scale: 1 },
-};
-
-const staggerContainer = (stagger = 0.1, delay = 0) => ({
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: stagger, delayChildren: delay },
-  },
-});
-
-// ─── Stack icon map ──────────────────────────────────────────────────────────
-
-const stackIcons = [
-  { key: "React", icon: BrandReactIcon, tone: "bg-cyan-pop" },
-  { key: "TypeScript", icon: TypescriptIcon, tone: "bg-blue-pop" },
-  { key: "Vite", icon: CodeXmlIcon, tone: "bg-yellow-pop" },
-  { key: "Zustand", icon: LayersIcon, tone: "bg-pink-pop" },
-  { key: "accessibility", icon: AccessibilityIcon, tone: "bg-green-pop" },
-  { key: "Performance", icon: CpuIcon, tone: "bg-red-pop" },
-];
-
-// ─── Scroll Section Wrapper ──────────────────────────────────────────────────
-
-function ScrollReveal({
-  children,
-  className,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      variants={fadeUp}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ─── Stack Card ──────────────────────────────────────────────────────────────
-
-function StackCard({
-  name,
-  icon: Icon,
-  tone,
-  desc,
-  delay,
-}: {
-  name: string;
-  icon: (typeof stackIcons)[number]["icon"];
-  tone: string;
-  desc: string;
-  delay: number;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const iconRef = useRef<AnimatedIconHandle>(null);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      variants={fadeUp}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
-      whileHover={{ y: -5, transition: { duration: 0.2, ease: "easeOut" } }}
-      onHoverStart={() => iconRef.current?.startAnimation()}
-      onHoverEnd={() => iconRef.current?.stopAnimation()}
-      className="cursor-pointer"
-    >
-      <Card className="block w-full overflow-hidden bg-paper shadow-brutal transition-shadow duration-200 hover:shadow-none">
-        <div
-          className={`flex items-center justify-between border-b-2 border-ink p-4 ${tone}`}
-        >
-          <p className="font-head text-xl font-black">{name}</p>
-          <Icon ref={iconRef} size={34} />
-        </div>
-        <Card.Content>
-          <p className="font-semibold leading-7 text-ink/76">{desc}</p>
-        </Card.Content>
-      </Card>
-    </motion.div>
-  );
-}
-
-// ─── FAQ Item Component ──────────────────────────────────────────────────────
-
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div
-      className="border-2 border-ink bg-paper text-ink shadow-brutal-sm cursor-pointer transition-all"
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <div className="flex items-center justify-between gap-4 p-5 font-bold text-base sm:text-lg select-none">
-        <span className="min-w-0">{q}</span>
-        <span className="font-head text-2xl shrink-0">{isOpen ? "−" : "+"}</span>
-      </div>
-      {isOpen && (
-        <div className="border-t-2 border-ink bg-background p-5 font-semibold leading-7 text-ink/80">
-          {a}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Main Client Component ───────────────────────────────────────────────────
-
-export default function PortfolioClient({
-  dict,
-  lang,
-}: {
+interface PortfolioClientProps {
   dict: Dictionary;
   lang: Locale;
-}) {
-  const valorRef = useRef(null);
-  const processRef = useRef(null);
-  const projectsRef = useRef(null);
-  const contactRef = useRef(null);
+}
 
-  const valorInView = useInView(valorRef, { once: true, margin: "-80px" });
-  const processInView = useInView(processRef, { once: true, margin: "-80px" });
-  const projectsInView = useInView(projectsRef, {
-    once: true,
-    margin: "-80px",
-  });
-  const contactInView = useInView(contactRef, { once: true, margin: "-80px" });
-
-  // Build stack items with localized names and descriptions
-  const stackItems = stackIcons.map((s) => {
-    const name =
-      s.key === "accessibility" ? dict.stack.accessibility_label : s.key;
-    const desc = (dict.stack.cards as Record<string, string>)[s.key] ?? "";
-    return { ...s, name, desc };
-  });
-
+export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      {/* ── Nav ── */}
-      <motion.header
-        className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur"
-        initial={{ y: -64, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <a
-            href="#topo"
-            className="font-head text-xl font-black uppercase tracking-normal"
-          >
-            {dict.nav.logo}
-          </a>
-          <div className="hidden items-center gap-2 text-sm font-bold md:flex">
-            <a className="nav-link" href="#valor">
-              {dict.nav.valor}
-            </a>
-            <a className="nav-link" href="#stack">
-              {dict.nav.stack}
-            </a>
-            <a className="nav-link" href="#projetos">
-              {dict.nav.projetos}
-            </a>
-            <a className="nav-link" href="#contato">
-              {dict.nav.contato}
-            </a>
-          </div>
-          <div className="flex items-center gap-3">
-            <LangSwitcher current={lang} />
-            <Button
-              render={<a href="#contato" />}
-              className="hidden h-10 px-4 text-sm sm:inline-flex"
-            >
-              {dict.nav.contratar}
-            </Button>
-          </div>
-        </nav>
-      </motion.header>
-
-      {/* ── Hero ── */}
-      <section
-        id="topo"
-        className="relative border-b-2 border-ink bg-[linear-gradient(90deg,rgba(17,17,17,.08)_1px,transparent_1px),linear-gradient(rgba(17,17,17,.08)_1px,transparent_1px)] bg-[size:28px_28px]"
-      >
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-18 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:py-20">
-          {/* Left column */}
-          <motion.div
-            className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer(0.1, 0.15)}
-          >
-            <motion.div
-              className="mb-5 flex flex-wrap items-center gap-3 justify-center lg:justify-start"
-              variants={fadeUp}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Badge variant="surface" className="border-2 border-ink">
-                {dict.hero.badge1}
-              </Badge>
-              <Badge variant="outline" className="bg-paper">
-                {dict.hero.badge2}
-              </Badge>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Text
-                as="h1"
-                className="max-w-4xl text-4xl leading-[0.95] sm:text-5xl lg:text-6xl"
-              >
-                {dict.hero.h1}
-              </Text>
-            </motion.div>
-
-            <motion.p
-              className="mt-6 max-w-2xl text-lg leading-8 text-ink/78 sm:text-xl"
-              variants={fadeUp}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {dict.hero.sub}
-            </motion.p>
-
-            <motion.div
-              className="mt-8 flex flex-col gap-3 lg:flex-row w-full lg:w-auto"
-              variants={fadeUp}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Button
-                size="lg"
-                render={<a href="#contato" />}
-                className="group min-h-14 justify-between gap-3"
-              >
-                {dict.hero.cta_primary}
-                <ArrowNarrowRightIcon
-                  size={24}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                render={<a href="#projetos" />}
-                className="min-h-14"
-              >
-                {dict.hero.cta_secondary}
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          {/* Right column — cockpit card */}
-          <motion.div
-            className="relative"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer(0.12, 0.5)}
-          >
-            {/* Cockpit card — must come first in DOM so stagger animates it before the tag */}
-            <motion.div
-              className="border-2 border-ink bg-paper shadow-brutal"
-              variants={scaleIn}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="flex items-center justify-between border-b-2 border-ink bg-pink-pop px-4 py-3">
-                <span className="font-head text-sm font-black uppercase">
-                  {dict.hero.cockpit_title}
-                </span>
-                <div className="flex gap-2">
-                  <span className="size-3 rounded-full border-2 border-ink bg-red-pop" />
-                  <span className="size-3 rounded-full border-2 border-ink bg-yellow-pop" />
-                  <span className="size-3 rounded-full border-2 border-ink bg-green-pop" />
-                </div>
-              </div>
-
-              <div className="grid gap-4 p-4 sm:grid-cols-2">
-                <motion.div
-                  className="border-2 border-ink bg-cyan-pop p-4 shadow-brutal-sm"
-                  variants={fadeUp}
-                  transition={{ duration: 0.45 }}
-                >
-                  <WifiIcon size={34} />
-                  <p className="mt-4 font-head text-2xl font-black sm:text-3xl">
-                    {dict.hero.cockpit_ui_title}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold">
-                    {dict.hero.cockpit_ui_desc}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  className="border-2 border-ink bg-green-pop p-4 shadow-brutal-sm"
-                  variants={fadeUp}
-                  transition={{ duration: 0.45 }}
-                >
-                  <LayersIcon size={34} />
-                  <p className="mt-4 font-head text-2xl font-black sm:text-3xl">
-                    {dict.hero.cockpit_a11y_title}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold">
-                    {dict.hero.cockpit_a11y_desc}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  className="border-2 border-ink bg-yellow-pop p-4 shadow-brutal-sm sm:col-span-2"
-                  variants={fadeUp}
-                  transition={{ duration: 0.45 }}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="font-head text-2xl font-black">
-                        {dict.hero.cockpit_ship_title}
-                      </p>
-                      <p className="mt-2 text-sm font-semibold">
-                        {dict.hero.cockpit_ship_desc}
-                      </p>
-                    </div>
-                    <SparklesIcon size={42} />
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Floating tag — after card in DOM so z-index stacks it on top naturally */}
-            <motion.div
-              className="absolute -right-6 top-6 z-10 hidden lg:block"
-              variants={scaleIn}
-              transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              <motion.div
-                className="rotate-6 border-2 border-ink bg-yellow-pop px-4 py-2 font-head text-sm font-black uppercase shadow-brutal"
-                animate={{ y: [0, -6, 0], rotate: [6, 8, 6] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                {dict.hero.floating_tag}
-              </motion.div>
-            </motion.div>
-          </motion.div>
+    <main className="mx-auto min-h-screen w-full max-w-xl px-6 py-16 sm:py-24">
+      <header className="mb-16 flex items-start justify-between gap-6">
+        <div>
+          <h1 className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+            {dict.name}
+          </h1>
+          <p className="mt-1 font-mono text-sm text-muted-foreground">
+            {dict.brand}
+          </p>
         </div>
+        <LangSwitcher current={lang} />
+      </header>
+
+      <section className="mb-16 space-y-4">
+        <p className="text-sm text-muted-foreground">{dict.role}</p>
+        {dict.bio.map((paragraph) => (
+          <p
+            key={paragraph}
+            className="text-[15px] leading-relaxed text-muted-foreground"
+          >
+            {paragraph}
+          </p>
+        ))}
       </section>
 
-      {/* ── Stats Bar ── */}
-      <section className="border-b-2 border-ink bg-yellow-pop">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {dict.stats.items.map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center">
-                <span className="font-head text-4xl font-black text-ink md:text-5xl">
-                  {stat.value}
+      <section className="mb-16">
+        <h2 className="mb-6 text-sm font-medium text-foreground">
+          {dict.sections.projects}
+        </h2>
+        <ul className="space-y-8">
+          {dict.projects.map((project) => (
+            <li key={project.title}>
+              {project.url ? (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-link text-[15px] font-medium"
+                >
+                  {project.title}
+                </a>
+              ) : (
+                <span className="text-[15px] font-medium text-foreground">
+                  {project.title}
                 </span>
-                <span className="mt-1 text-sm font-bold text-ink/80 uppercase">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Valor ── */}
-      <section id="valor" className="border-b-2 border-ink bg-cyan-pop">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
-          <ScrollReveal className="text-center lg:text-left">
-            <Text as="h2" className="text-4xl sm:text-5xl">
-              {dict.valor.h2}
-            </Text>
-            <p className="mt-4 text-base font-semibold leading-7">
-              {dict.valor.sub}
-            </p>
-          </ScrollReveal>
-
-          <motion.div
-            ref={valorRef}
-            className="grid gap-4 sm:grid-cols-2"
-            initial="hidden"
-            animate={valorInView ? "visible" : "hidden"}
-            variants={staggerContainer(0.1, 0.1)}
-          >
-            {dict.valor.strengths.map((item) => (
-              <motion.div
-                key={item}
-                variants={fadeUp}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <Card className="block w-full bg-paper p-5">
-                  <p className="text-base font-bold leading-7">{item}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Stack ── */}
-      <section id="stack" className="border-b-2 border-ink bg-paper">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center lg:text-left">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div className="flex flex-col items-center lg:items-start">
-                <Badge variant="solid">{dict.stack.badge}</Badge>
-                <Text as="h2" className="mt-4 text-4xl sm:text-5xl">
-                  {dict.stack.h2}
-                </Text>
-              </div>
-              <p className="mx-auto max-w-xl text-base font-semibold leading-7 text-ink/75 lg:mx-0">
-                {dict.stack.sub}
+              )}
+              <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
+                {project.description}
               </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {stackItems.map((item, i) => (
-              <StackCard
-                key={item.key}
-                name={item.name}
-                icon={item.icon}
-                tone={item.tone}
-                desc={item.desc}
-                delay={i * 0.08}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Projetos ── */}
-      <section id="projetos" className="border-b-2 border-ink bg-green-pop">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center lg:text-left">
-            <div className="mx-auto lg:mx-0 max-w-3xl flex flex-col items-center lg:items-start">
-              <Badge variant="outline" className="bg-paper">
-                {dict.projetos.badge}
-              </Badge>
-              <Text as="h2" className="mt-4 text-4xl sm:text-5xl">
-                {dict.projetos.h2}
-              </Text>
-            </div>
-          </ScrollReveal>
-
-          <motion.div
-            ref={projectsRef}
-            className="mt-8 grid gap-5 lg:grid-cols-3"
-            initial="hidden"
-            animate={projectsInView ? "visible" : "hidden"}
-            variants={staggerContainer(0.12, 0.1)}
-          >
-            {dict.projetos.items.map((project) => {
-              const url = (project as Record<string, unknown>).url as
-                | string
-                | undefined;
-              return (
-                <motion.div
-                  key={project.title}
-                  variants={fadeUp}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ y: -4, transition: { duration: 0.18 } }}
-                >
-                  <Card className="flex h-full flex-col overflow-hidden bg-paper">
-                    <Card.Header>
-                      <Card.Title className="text-xl font-black sm:text-2xl break-words">
-                        {project.title}
-                      </Card.Title>
-                      <Card.Description className="text-sm font-semibold leading-7 text-ink/74 sm:text-base">
-                        {project.description}
-                      </Card.Description>
-                    </Card.Header>
-                    <Card.Content className="mt-auto flex flex-wrap items-center gap-2 pt-0">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} size="sm" variant="surface">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {url && (
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="ml-auto inline-flex items-center gap-1 border-2 border-ink bg-yellow-pop px-3 py-1 text-sm font-black shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-                        >
-                          Ver projeto
-                          <ArrowNarrowRightIcon size={16} />
-                        </a>
-                      )}
-                    </Card.Content>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Process ── */}
-      <section className="border-b-2 border-ink bg-paper">
-        <motion.div
-          ref={processRef}
-          className="mx-auto grid max-w-7xl gap-5 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8"
-          initial="hidden"
-          animate={processInView ? "visible" : "hidden"}
-          variants={staggerContainer(0.14, 0)}
-        >
-          {dict.processo.items.map((item) => (
-            <motion.div
-              key={item.step}
-              variants={fadeUp}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -4, transition: { duration: 0.18 } }}
-              className="border-2 border-ink bg-background p-5 shadow-brutal-sm"
-            >
-              <span className="font-head text-5xl font-black text-red-pop text-stroke">
-                {item.step}
-              </span>
-              <Text as="h3" className="mt-3 text-2xl font-black">
-                {item.title}
-              </Text>
-              <p className="mt-3 font-semibold leading-7 text-ink/75">
-                {item.copy}
-              </p>
-            </motion.div>
+            </li>
           ))}
-        </motion.div>
+        </ul>
       </section>
 
-      {/* ── FAQ ── */}
-      <section className="border-b-2 border-ink bg-pink-pop">
-        <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center lg:text-left mb-10">
-            <div className="mx-auto lg:mx-0 max-w-3xl flex flex-col items-center lg:items-start">
-              <Badge variant="solid" className="bg-ink text-paper">
-                {dict.faq.badge}
-              </Badge>
-              <Text as="h2" className="mt-4 text-4xl sm:text-5xl">
-                {dict.faq.h2}
-              </Text>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid gap-4">
-            {dict.faq.questions.map((item, idx) => (
-              <FAQItem key={idx} q={item.q} a={item.a} />
-            ))}
-          </div>
-        </div>
+      <section className="mb-16">
+        <h2 className="mb-6 text-sm font-medium text-foreground">
+          {dict.sections.stack}
+        </h2>
+        <p className="text-[15px] leading-relaxed text-muted-foreground">
+          {dict.stack.join(" · ")}
+        </p>
       </section>
 
-      {/* ── Contato ── */}
-      <section id="contato" className="bg-ink text-paper">
-        <motion.div
-          ref={contactRef}
-          className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_.85fr] lg:px-8"
-          initial="hidden"
-          animate={contactInView ? "visible" : "hidden"}
-          variants={staggerContainer(0.15, 0)}
-        >
-          <motion.div
-            variants={fadeUp}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="text-center lg:text-left flex flex-col items-center lg:items-start"
-          >
-            <Badge className="bg-yellow-pop text-ink">{dict.contato.badge}</Badge>
-            <Text as="h2" className="mt-5 max-w-3xl text-4xl sm:text-6xl">
-              {dict.contato.h2}
-            </Text>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-paper/78">
-              {dict.contato.sub}
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={fadeUp}
-            transition={{
-              duration: 0.55,
-              ease: [0.22, 1, 0.36, 1],
-              delay: 0.1,
-            }}
-          >
-            <Card className="block w-full bg-paper text-ink">
-              <Card.Header>
-                <Card.Title className="text-3xl font-black">
-                  {dict.contato.card_title}
-                </Card.Title>
-                <Card.Description className="font-semibold leading-7 text-ink/74">
-                  {dict.contato.card_desc}
-                </Card.Description>
-              </Card.Header>
-              <Card.Content className="grid gap-3 pt-0">
-                <a className="contact-link overflow-hidden" href="mailto:gabrielarroyoc18@gmail.com">
-                  <GmailIcon size={24} className="shrink-0" />
-                  <span className="truncate">gabrielarroyoc18@gmail.com</span>
-                </a>
-                <a
-                  className="contact-link"
-                  href="https://github.com/gabrielarroyoc"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={dict.contato.github_label}
-                >
-                  <GithubIcon size={24} />
-                  GitHub
-                </a>
-                <a
-                  className="contact-link"
-                  href="https://www.linkedin.com/in/gabriel-arroyo-800312183/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={dict.contato.linkedin_label}
-                >
-                  <LinkedinIcon size={24} />
-                  LinkedIn
-                </a>
-              </Card.Content>
-            </Card>
-          </motion.div>
-        </motion.div>
+      <section>
+        <h2 className="mb-6 text-sm font-medium text-foreground">
+          {dict.sections.connect}
+        </h2>
+        <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[15px]">
+          <li>
+            <a
+              href={`mailto:${dict.connect.email}`}
+              className="text-link"
+            >
+              {dict.connect.emailLabel}
+            </a>
+          </li>
+          <li>
+            <a
+              href={dict.connect.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-link"
+            >
+              {dict.connect.githubLabel}
+            </a>
+          </li>
+          <li>
+            <a
+              href={dict.connect.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-link"
+            >
+              {dict.connect.linkedinLabel}
+            </a>
+          </li>
+        </ul>
       </section>
     </main>
   );
