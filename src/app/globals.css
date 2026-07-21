@@ -11,11 +11,12 @@
 }
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --muted: #171717;
-  --muted-foreground: #a1a1a1;
-  --border: #262626;
+  color-scheme: light;
+  --background: #fafafa;
+  --foreground: #111111;
+  --muted: #f0f0f0;
+  --muted-foreground: #525252;
+  --border: #e5e5e5;
 }
 
 @layer base {
@@ -31,9 +32,16 @@
     @apply min-h-screen bg-background font-sans text-foreground;
   }
 
+  a[href],
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
+
   ::selection {
-    background: #ededed;
-    color: #0a0a0a;
+    background: var(--foreground);
+    color: var(--background);
   }
 }
 

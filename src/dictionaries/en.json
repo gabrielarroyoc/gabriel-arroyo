@@ -1,14 +1,14 @@
 {
   "meta": {
-    "title": "Gabriel Arroyo | Front-End",
+    "title": "arroyo.dev",
     "description": "Gabriel Arroyo — front-end developer. React, TypeScript, and product-focused interfaces."
   },
   "name": "Gabriel Arroyo",
   "brand": "arroyo.dev",
   "role": "Front-End Developer",
   "bio": [
-    "I build resilient, fast interfaces focused on product experience — mainly with React and TypeScript.",
-    "I don’t stop at translating layouts. I understand business requirements, model client-side data, and ship clean, typed, production-ready code."
+    "I build interfaces with React and TypeScript with product in mind: what the user needs to do, which states the app must hold, and where complexity actually lives.",
+    "I don’t stop at translating layouts. I structure complex state, integrate APIs, and prioritize maintainability, performance, and clear typed code."
   ],
   "sections": {
     "projects": "Projects",
@@ -18,16 +18,16 @@
   "projects": [
     {
       "title": "Arkhiveon",
-      "description": "Realtime collaborative SaaS for RPG campaigns — multi-user sync, complex state, and RLS.",
+      "description": "Collaborative SaaS for RPG campaigns with authentication, PostgreSQL RLS permissions, and multi-user realtime sync. Global state with Zustand and dynamic forms with validation.",
       "url": "https://arkhiveon.com.br"
     },
     {
       "title": "Modular design system",
-      "description": "Typed, accessible component library with design tokens and Tailwind CSS."
+      "description": "Typed, accessible component library with design tokens and Tailwind CSS — visual consistency without coupling styles to the product."
     },
     {
-      "title": "High-performance dashboards",
-      "description": "Dense REST-backed interfaces with lazy loading and fine-grained render control."
+      "title": "Dense dashboards",
+      "description": "REST-backed interfaces built for fast loads: lazy loading, code splitting, and render control to avoid unnecessary updates."
     }
   ],
   "stack": [

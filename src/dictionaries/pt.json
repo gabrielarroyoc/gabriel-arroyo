@@ -1,14 +1,14 @@
 {
   "meta": {
-    "title": "Gabriel Arroyo | Front-End",
+    "title": "arroyo.dev",
     "description": "Gabriel Arroyo — desenvolvedor front-end. React, TypeScript e interfaces de produto."
   },
   "name": "Gabriel Arroyo",
   "brand": "arroyo.dev",
   "role": "Desenvolvedor Front-End",
   "bio": [
-    "Construo interfaces resilientes, rápidas e focadas na experiência do produto — principalmente com React e TypeScript.",
-    "Não me limito a replicar layouts. Entendo requisitos de negócio, modelo dados no front-end e entrego código limpo, tipado e pronto para produção."
+    "Construo interfaces com React e TypeScript pensando em produto: o que o usuário precisa fazer, quais estados a aplicação precisa carregar e onde a complexidade realmente mora.",
+    "Não me limito a replicar layouts. Estruturo estados complexos, integro APIs e priorizo manutenção, performance e clareza no código tipado."
   ],
   "sections": {
     "projects": "Projetos",
@@ -18,16 +18,16 @@
   "projects": [
     {
       "title": "Arkhiveon",
-      "description": "SaaS colaborativo realtime para campanhas de RPG — sincronização multi-usuário, estado complexo e RLS.",
+      "description": "SaaS colaborativo para campanhas de RPG com autenticação, permissões via PostgreSQL RLS e sincronização realtime multi-usuário. Estado global com Zustand e formulários dinâmicos com validação.",
       "url": "https://arkhiveon.com.br"
     },
     {
       "title": "Design System modular",
-      "description": "Biblioteca de componentes tipados, acessíveis e orientados a tokens com Tailwind CSS."
+      "description": "Biblioteca de componentes tipados e acessíveis, com tokens de design e Tailwind CSS para manter consistência visual sem acoplar estilos ao produto."
     },
     {
-      "title": "Dashboards de alta performance",
-      "description": "Interfaces densas com APIs REST, lazy loading e controle fino de renderização."
+      "title": "Dashboards densos",
+      "description": "Interfaces com APIs REST focadas em carregamento rápido: lazy loading, code splitting e controle de renderização para evitar updates desnecessários."
     }
   ],
   "stack": [
