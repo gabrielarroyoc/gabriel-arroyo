@@ -22,12 +22,14 @@
       "url": "https://arkhiveon.com.br"
     },
     {
-      "title": "Design System modular",
-      "description": "Biblioteca de componentes tipados e acessíveis, com tokens de design e Tailwind CSS para manter consistência visual sem acoplar estilos ao produto."
+      "title": "TriPl",
+      "description": "Plataforma de planejamento de viagens: roteiros dia a dia, destinos e consulta de voos/clima. React, Vite, Tailwind, Zustand e autenticação com Supabase, com i18n PT/EN.",
+      "url": "https://tripl-ebon.vercel.app"
     },
     {
-      "title": "Dashboards densos",
-      "description": "Interfaces com APIs REST focadas em carregamento rápido: lazy loading, code splitting e controle de renderização para evitar updates desnecessários."
+      "title": "Margem",
+      "description": "App de finanças pessoais para acompanhar gastos, orçamento e visão clara do dinheiro no dia a dia.",
+      "status": "Em construção"
     }
   ],
   "stack": [

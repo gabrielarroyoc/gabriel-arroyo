@@ -42,20 +42,27 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
         <ul className="space-y-8">
           {dict.projects.map((project) => (
             <li key={project.title}>
-              {project.url ? (
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-link text-[15px] font-medium"
-                >
-                  {project.title}
-                </a>
-              ) : (
-                <span className="text-[15px] font-medium text-foreground">
-                  {project.title}
-                </span>
-              )}
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                {project.url ? (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-link text-[15px] font-medium"
+                  >
+                    {project.title}
+                  </a>
+                ) : (
+                  <span className="text-[15px] font-medium text-foreground">
+                    {project.title}
+                  </span>
+                )}
+                {"status" in project && project.status ? (
+                  <span className="text-sm text-muted-foreground">
+                    {project.status}
+                  </span>
+                ) : null}
+              </div>
               <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
                 {project.description}
               </p>
