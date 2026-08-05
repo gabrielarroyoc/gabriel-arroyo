@@ -4,15 +4,7 @@ import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 import LangSwitcher from "@/components/LangSwitcher";
 import { useCallback, useEffect, useRef } from "react";
 
-const LANGUAGE_SLIDE_KEY = "portfolio-language-slide";
-const LOCALE_ORDER: Locale[] = ["pt", "en"];
-
-type LanguageSlideDirection = "forward" | "back";
-type LanguageTransitionState =
-  | "exit-left"
-  | "exit-right"
-  | "enter-left"
-  | "enter-right";
+const LANGUAGE_SWAP_KEY = "portfolio-language-swap";
 
 function readCssMs(element: HTMLElement, variable: string, fallback: number) {
   const raw = getComputedStyle(element).getPropertyValue(variable).trim();
@@ -21,27 +13,6 @@ function readCssMs(element: HTMLElement, variable: string, fallback: number) {
   if (!raw || Number.isNaN(value)) return fallback;
 
   return raw.endsWith("s") && !raw.endsWith("ms") ? value * 1000 : value;
-}
-
-function getSlideDirection(
-  current: Locale,
-  next: Locale,
-): LanguageSlideDirection {
-  return LOCALE_ORDER.indexOf(next) > LOCALE_ORDER.indexOf(current)
-    ? "forward"
-    : "back";
-}
-
-function getExitState(direction: LanguageSlideDirection): LanguageTransitionState {
-  return direction === "forward" ? "exit-left" : "exit-right";
-}
-
-function getEnterState(direction: LanguageSlideDirection): LanguageTransitionState {
-  return direction === "forward" ? "enter-right" : "enter-left";
-}
-
-function isSlideDirection(value: string | null): value is LanguageSlideDirection {
-  return value === "forward" || value === "back";
 }
 
 function ExternalLinkIcon({ className }: { className?: string }) {
@@ -75,26 +46,23 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
     const block = revealRef.current;
     if (!block) return;
 
-    const storedDirection = window.sessionStorage.getItem(LANGUAGE_SLIDE_KEY);
-    const incomingDirection = isSlideDirection(storedDirection)
-      ? storedDirection
-      : null;
+    const hasLanguageSwap =
+      window.sessionStorage.getItem(LANGUAGE_SWAP_KEY) === "true";
 
-    if (storedDirection) {
-      window.sessionStorage.removeItem(LANGUAGE_SLIDE_KEY);
+    if (hasLanguageSwap) {
+      window.sessionStorage.removeItem(LANGUAGE_SWAP_KEY);
     }
 
     block.classList.remove("is-hiding");
 
-    if (incomingDirection) {
-      const enterState = getEnterState(incomingDirection);
-
-      block.setAttribute("data-lang-transition", enterState);
+    if (hasLanguageSwap) {
+      block.classList.remove("is-initial-entry");
+      block.setAttribute("data-lang-transition", "enter");
       block.classList.add("is-shown");
 
       const timeout = window.setTimeout(() => {
         block.removeAttribute("data-lang-transition");
-      }, readCssMs(block, "--page-slide-dur", 250));
+      }, readCssMs(block, "--lang-swap-dur", 150));
 
       hasMountedRef.current = true;
 
@@ -103,11 +71,13 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
 
     if (hasMountedRef.current) {
       block.removeAttribute("data-lang-transition");
+      block.classList.remove("is-initial-entry");
       block.classList.add("is-shown");
       return;
     }
 
     block.classList.remove("is-shown");
+    block.classList.add("is-initial-entry");
     void block.offsetHeight;
 
     const frame = requestAnimationFrame(() => {
@@ -124,7 +94,6 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
       if (next === lang) return;
 
       const block = revealRef.current;
-      const direction = getSlideDirection(lang, next);
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -133,13 +102,14 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
 
       if (!block) return;
 
-      window.sessionStorage.setItem(LANGUAGE_SLIDE_KEY, direction);
-      block.setAttribute("data-lang-transition", getExitState(direction));
+      window.sessionStorage.setItem(LANGUAGE_SWAP_KEY, "true");
+      block.classList.remove("is-initial-entry");
+      block.setAttribute("data-lang-transition", "exit");
 
       await new Promise<void>((resolve) => {
         window.setTimeout(
           resolve,
-          readCssMs(block, "--page-slide-dur", 250),
+          readCssMs(block, "--lang-swap-dur", 150),
         );
       });
     },
@@ -150,7 +120,7 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
     <main
       ref={revealRef}
       data-animation-controller="true"
-      className="t-stagger t-lang-slide mx-auto min-h-screen w-full max-w-xl px-6 py-16 sm:py-24"
+      className="t-stagger t-lang-swap mx-auto min-h-screen w-full max-w-xl px-6 py-16 sm:py-24"
     >
       <div data-animate="" className="t-stagger-line t-stagger-line--1">
         <header className="mb-16 flex items-start justify-between gap-6">
@@ -158,7 +128,7 @@ export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
             <h1 className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
               {dict.name}
             </h1>
-            <p className="mt-1 font-mono text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground">
               {dict.brand}
             </p>
           </div>
