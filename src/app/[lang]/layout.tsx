@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "../globals.css";
 import {
   getDictionary,
@@ -8,14 +8,10 @@ import {
   type Locale,
 } from "./dictionaries";
 
-const geistSans = Geist({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+  display: "swap",
+  variable: "--font-manrope",
 });
 
 export async function generateStaticParams() {
@@ -48,7 +44,7 @@ export default async function LangLayout({
   const locale: Locale = hasLocale(lang) ? lang : "pt";
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={locale} className={manrope.variable}>
       <body>{children}</body>
     </html>
   );

@@ -6,8 +6,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -22,14 +22,10 @@
   --stagger-stagger: 120ms;
   --stagger-start: 0s;
   --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --page-slide-dur: 250ms;
-  --page-fade-dur: 250ms;
-  --page-slide-distance: 16px;
-  --page-blur: 3px;
-  --page-stagger: 0ms;
-  --page-exit-enabled: 1;
-  --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lang-swap-dur: 150ms;
+  --lang-swap-distance: 4px;
+  --lang-swap-blur: 2px;
+  --lang-swap-ease: ease-in-out;
 }
 
 @layer base {
@@ -89,7 +85,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .t-stagger.is-shown .t-stagger-line {
+  .t-stagger.is-shown.is-initial-entry .t-stagger-line {
     animation: portfolio-enter var(--stagger-dur) both var(--stagger-ease);
     animation-delay: calc(
       var(--stagger) * var(--stagger-stagger) + var(--stagger-start)
@@ -104,42 +100,30 @@
   transition: opacity 200ms ease;
 }
 
-.t-lang-slide {
+.t-lang-swap {
   transition:
-    opacity var(--page-fade-dur) var(--page-fade-ease),
-    transform var(--page-slide-dur) var(--page-slide-ease),
-    filter var(--page-slide-dur) var(--page-slide-ease);
+    transform var(--lang-swap-dur) var(--lang-swap-ease),
+    filter var(--lang-swap-dur) var(--lang-swap-ease),
+    opacity var(--lang-swap-dur) var(--lang-swap-ease);
   will-change: opacity, transform, filter;
 }
 
-.t-lang-slide[data-lang-transition] .t-stagger-line {
+.t-lang-swap[data-lang-transition] .t-stagger-line {
   opacity: 1;
   transform: none;
   animation: none !important;
 }
 
-.t-lang-slide[data-lang-transition="exit-left"] {
+.t-lang-swap[data-lang-transition="exit"] {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(calc(var(--page-slide-distance) * -1));
-  filter: blur(var(--page-blur));
+  transform: translateY(calc(var(--lang-swap-distance) * -1));
+  filter: blur(var(--lang-swap-blur));
 }
 
-.t-lang-slide[data-lang-transition="exit-right"] {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(var(--page-slide-distance));
-  filter: blur(var(--page-blur));
-}
-
-.t-lang-slide[data-lang-transition="enter-left"] {
-  animation: portfolio-language-slide-in-left var(--page-slide-dur) both
-    var(--page-slide-ease);
-}
-
-.t-lang-slide[data-lang-transition="enter-right"] {
-  animation: portfolio-language-slide-in-right var(--page-slide-dur) both
-    var(--page-slide-ease);
+.t-lang-swap[data-lang-transition="enter"] {
+  animation: portfolio-language-swap-in var(--lang-swap-dur) both
+    var(--lang-swap-ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -149,7 +133,7 @@
     will-change: auto;
   }
 
-  .t-lang-slide {
+  .t-lang-swap {
     animation: none !important;
     transition: none !important;
     transform: none !important;
@@ -157,7 +141,7 @@
     will-change: auto;
   }
 
-  .t-lang-slide[data-lang-transition] {
+  .t-lang-swap[data-lang-transition] {
     opacity: 1;
     pointer-events: auto;
   }
@@ -175,25 +159,11 @@
   }
 }
 
-@keyframes portfolio-language-slide-in-left {
+@keyframes portfolio-language-swap-in {
   from {
     opacity: 0;
-    transform: translateX(calc(var(--page-slide-distance) * -1));
-    filter: blur(var(--page-blur));
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
-}
-
-@keyframes portfolio-language-slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(var(--page-slide-distance));
-    filter: blur(var(--page-blur));
+    transform: translateY(var(--lang-swap-distance));
+    filter: blur(var(--lang-swap-blur));
   }
 
   to {
