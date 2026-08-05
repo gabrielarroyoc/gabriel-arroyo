@@ -17,6 +17,19 @@
   --muted: #f0f0f0;
   --muted-foreground: #525252;
   --border: #e5e5e5;
+  --stagger-dur: 600ms;
+  --stagger-distance: 10px;
+  --stagger-stagger: 120ms;
+  --stagger-start: 0s;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-slide-dur: 250ms;
+  --page-fade-dur: 250ms;
+  --page-slide-distance: 16px;
+  --page-blur: 3px;
+  --page-stagger: 0ms;
+  --page-exit-enabled: 1;
+  --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -52,5 +65,140 @@
 
   .text-link:hover {
     @apply decoration-muted-foreground;
+  }
+}
+
+/* Paco-style gradual entrance: each block rises softly with a
+   numbered stagger, keeping the page quiet and readable. */
+.t-stagger-line {
+  --stagger: 0;
+  display: block;
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  will-change: transform, opacity;
+}
+.t-stagger-line--1 { --stagger: 0; }
+.t-stagger-line--2 { --stagger: 1; }
+.t-stagger-line--3 { --stagger: 2; }
+.t-stagger-line--4 { --stagger: 3; }
+.t-stagger-line--5 { --stagger: 4; }
+
+.t-stagger.is-shown .t-stagger-line {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .t-stagger.is-shown .t-stagger-line {
+    animation: portfolio-enter var(--stagger-dur) both var(--stagger-ease);
+    animation-delay: calc(
+      var(--stagger) * var(--stagger-stagger) + var(--stagger-start)
+    );
+  }
+}
+
+.t-stagger.is-hiding .t-stagger-line {
+  opacity: 0;
+  transform: none;
+  animation: none;
+  transition: opacity 200ms ease;
+}
+
+.t-lang-slide {
+  transition:
+    opacity var(--page-fade-dur) var(--page-fade-ease),
+    transform var(--page-slide-dur) var(--page-slide-ease),
+    filter var(--page-slide-dur) var(--page-slide-ease);
+  will-change: opacity, transform, filter;
+}
+
+.t-lang-slide[data-lang-transition] .t-stagger-line {
+  opacity: 1;
+  transform: none;
+  animation: none !important;
+}
+
+.t-lang-slide[data-lang-transition="exit-left"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(calc(var(--page-slide-distance) * -1));
+  filter: blur(var(--page-blur));
+}
+
+.t-lang-slide[data-lang-transition="exit-right"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(var(--page-slide-distance));
+  filter: blur(var(--page-blur));
+}
+
+.t-lang-slide[data-lang-transition="enter-left"] {
+  animation: portfolio-language-slide-in-left var(--page-slide-dur) both
+    var(--page-slide-ease);
+}
+
+.t-lang-slide[data-lang-transition="enter-right"] {
+  animation: portfolio-language-slide-in-right var(--page-slide-dur) both
+    var(--page-slide-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-stagger-line {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .t-lang-slide {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    will-change: auto;
+  }
+
+  .t-lang-slide[data-lang-transition] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@keyframes portfolio-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--stagger-distance));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes portfolio-language-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--page-slide-distance) * -1));
+    filter: blur(var(--page-blur));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes portfolio-language-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--page-slide-distance));
+    filter: blur(var(--page-blur));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
   }
 }
