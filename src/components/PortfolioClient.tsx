@@ -2,6 +2,47 @@
 
 import type { Dictionary, Locale } from "@/app/[lang]/dictionaries";
 import LangSwitcher from "@/components/LangSwitcher";
+import { useCallback, useEffect, useRef } from "react";
+
+const LANGUAGE_SLIDE_KEY = "portfolio-language-slide";
+const LOCALE_ORDER: Locale[] = ["pt", "en"];
+
+type LanguageSlideDirection = "forward" | "back";
+type LanguageTransitionState =
+  | "exit-left"
+  | "exit-right"
+  | "enter-left"
+  | "enter-right";
+
+function readCssMs(element: HTMLElement, variable: string, fallback: number) {
+  const raw = getComputedStyle(element).getPropertyValue(variable).trim();
+  const value = Number.parseFloat(raw);
+
+  if (!raw || Number.isNaN(value)) return fallback;
+
+  return raw.endsWith("s") && !raw.endsWith("ms") ? value * 1000 : value;
+}
+
+function getSlideDirection(
+  current: Locale,
+  next: Locale,
+): LanguageSlideDirection {
+  return LOCALE_ORDER.indexOf(next) > LOCALE_ORDER.indexOf(current)
+    ? "forward"
+    : "back";
+}
+
+function getExitState(direction: LanguageSlideDirection): LanguageTransitionState {
+  return direction === "forward" ? "exit-left" : "exit-right";
+}
+
+function getEnterState(direction: LanguageSlideDirection): LanguageTransitionState {
+  return direction === "forward" ? "enter-right" : "enter-left";
+}
+
+function isSlideDirection(value: string | null): value is LanguageSlideDirection {
+  return value === "forward" || value === "back";
+}
 
 function ExternalLinkIcon({ className }: { className?: string }) {
   return (
@@ -27,125 +68,219 @@ interface PortfolioClientProps {
 }
 
 export default function PortfolioClient({ dict, lang }: PortfolioClientProps) {
+  const revealRef = useRef<HTMLElement>(null);
+  const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    const block = revealRef.current;
+    if (!block) return;
+
+    const storedDirection = window.sessionStorage.getItem(LANGUAGE_SLIDE_KEY);
+    const incomingDirection = isSlideDirection(storedDirection)
+      ? storedDirection
+      : null;
+
+    if (storedDirection) {
+      window.sessionStorage.removeItem(LANGUAGE_SLIDE_KEY);
+    }
+
+    block.classList.remove("is-hiding");
+
+    if (incomingDirection) {
+      const enterState = getEnterState(incomingDirection);
+
+      block.setAttribute("data-lang-transition", enterState);
+      block.classList.add("is-shown");
+
+      const timeout = window.setTimeout(() => {
+        block.removeAttribute("data-lang-transition");
+      }, readCssMs(block, "--page-slide-dur", 250));
+
+      hasMountedRef.current = true;
+
+      return () => window.clearTimeout(timeout);
+    }
+
+    if (hasMountedRef.current) {
+      block.removeAttribute("data-lang-transition");
+      block.classList.add("is-shown");
+      return;
+    }
+
+    block.classList.remove("is-shown");
+    void block.offsetHeight;
+
+    const frame = requestAnimationFrame(() => {
+      block.classList.add("is-shown");
+    });
+
+    hasMountedRef.current = true;
+
+    return () => cancelAnimationFrame(frame);
+  }, [lang]);
+
+  const handleBeforeLanguageSwitch = useCallback(
+    async (next: Locale) => {
+      if (next === lang) return;
+
+      const block = revealRef.current;
+      const direction = getSlideDirection(lang, next);
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (prefersReducedMotion) return;
+
+      if (!block) return;
+
+      window.sessionStorage.setItem(LANGUAGE_SLIDE_KEY, direction);
+      block.setAttribute("data-lang-transition", getExitState(direction));
+
+      await new Promise<void>((resolve) => {
+        window.setTimeout(
+          resolve,
+          readCssMs(block, "--page-slide-dur", 250),
+        );
+      });
+    },
+    [lang],
+  );
+
   return (
-    <main className="mx-auto min-h-screen w-full max-w-xl px-6 py-16 sm:py-24">
-      <header className="mb-16 flex items-start justify-between gap-6">
-        <div>
-          <h1 className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
-            {dict.name}
-          </h1>
-          <p className="mt-1 font-mono text-sm text-muted-foreground">
-            {dict.brand}
-          </p>
-        </div>
-        <LangSwitcher current={lang} />
-      </header>
+    <main
+      ref={revealRef}
+      data-animation-controller="true"
+      className="t-stagger t-lang-slide mx-auto min-h-screen w-full max-w-xl px-6 py-16 sm:py-24"
+    >
+      <div data-animate="" className="t-stagger-line t-stagger-line--1">
+        <header className="mb-16 flex items-start justify-between gap-6">
+          <div>
+            <h1 className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+              {dict.name}
+            </h1>
+            <p className="mt-1 font-mono text-sm text-muted-foreground">
+              {dict.brand}
+            </p>
+          </div>
+          <LangSwitcher
+            current={lang}
+            onBeforeSwitch={handleBeforeLanguageSwitch}
+          />
+        </header>
+      </div>
 
-      <section className="mb-16 space-y-4">
-        <p className="text-sm text-muted-foreground">{dict.role}</p>
-        {dict.bio.map((paragraph) => (
-          <p
-            key={paragraph}
-            className="text-[15px] leading-relaxed text-muted-foreground"
-          >
-            {paragraph}
-          </p>
-        ))}
-      </section>
+      <div data-animate="" className="t-stagger-line t-stagger-line--2">
+        <section className="mb-16 space-y-4">
+          <p className="text-sm text-muted-foreground">{dict.role}</p>
+          {dict.bio.map((paragraph) => (
+            <p
+              key={paragraph}
+              className="text-[15px] leading-relaxed text-muted-foreground"
+            >
+              {paragraph}
+            </p>
+          ))}
+        </section>
+      </div>
 
-      <section className="mb-16">
-        <h2 className="mb-6 text-sm font-medium text-foreground">
-          {dict.sections.projects}
-        </h2>
-        <ul className="-mx-3">
-          {dict.projects.map((project) => {
-            const status =
-              "status" in project && project.status ? project.status : null;
-            const content = (
-              <>
-                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <span className="inline-flex items-baseline gap-1 text-[15px] font-medium text-foreground">
-                    {project.title}
-                    {project.url ? (
-                      <ExternalLinkIcon className="relative top-px size-3 shrink-0 translate-x-[-2px] translate-y-[2px] text-foreground opacity-0 transition-all duration-150 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
-                    ) : null}
-                  </span>
-                  {status ? (
-                    <span className="text-sm text-muted-foreground">
-                      {status}
+      <div data-animate="" className="t-stagger-line t-stagger-line--3">
+        <section className="mb-16">
+          <h2 className="mb-6 text-sm font-medium text-foreground">
+            {dict.sections.projects}
+          </h2>
+          <ul className="-mx-3">
+            {dict.projects.map((project) => {
+              const status =
+                "status" in project && project.status
+                  ? project.status
+                  : null;
+              const content = (
+                <>
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    <span className="inline-flex items-baseline gap-1 text-[15px] font-medium text-foreground">
+                      {project.title}
+                      {project.url ? (
+                        <ExternalLinkIcon className="relative top-px size-3 shrink-0 translate-x-[-2px] translate-y-[2px] text-foreground opacity-0 transition-all duration-150 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
+                      ) : null}
                     </span>
-                  ) : null}
-                </div>
-                <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
-                  {project.description}
-                </p>
-              </>
-            );
+                    {status ? (
+                      <span className="text-sm text-muted-foreground">
+                        {status}
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
+                    {project.description}
+                  </p>
+                </>
+              );
 
-            return (
-              <li key={project.title}>
-                {project.url ? (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block rounded-lg px-3 py-3 transition-colors duration-150 hover:bg-muted"
-                  >
-                    {content}
-                  </a>
-                ) : (
-                  <div className="rounded-lg px-3 py-3">{content}</div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+              return (
+                <li key={project.title}>
+                  {project.url ? (
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block rounded-lg px-3 py-3 transition-colors duration-150 hover:bg-muted"
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <div className="rounded-lg px-3 py-3">{content}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </div>
 
-      <section className="mb-16">
-        <h2 className="mb-6 text-sm font-medium text-foreground">
-          {dict.sections.stack}
-        </h2>
-        <p className="text-[15px] leading-relaxed text-muted-foreground">
-          {dict.stack.join(" · ")}
-        </p>
-      </section>
+      <div data-animate="" className="t-stagger-line t-stagger-line--4">
+        <section className="mb-16">
+          <h2 className="mb-6 text-sm font-medium text-foreground">
+            {dict.sections.stack}
+          </h2>
+          <p className="text-[15px] leading-relaxed text-muted-foreground">
+            {dict.stack.join(" · ")}
+          </p>
+        </section>
+      </div>
 
-      <section>
-        <h2 className="mb-6 text-sm font-medium text-foreground">
-          {dict.sections.connect}
-        </h2>
-        <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[15px]">
-          <li>
-            <a
-              href={`mailto:${dict.connect.email}`}
-              className="text-link"
-            >
-              {dict.connect.emailLabel}
-            </a>
-          </li>
-          <li>
-            <a
-              href={dict.connect.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-link"
-            >
-              {dict.connect.githubLabel}
-            </a>
-          </li>
-          <li>
-            <a
-              href={dict.connect.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-link"
-            >
-              {dict.connect.linkedinLabel}
-            </a>
-          </li>
-        </ul>
-      </section>
+      <div data-animate="" className="t-stagger-line t-stagger-line--5">
+        <section>
+          <h2 className="mb-6 text-sm font-medium text-foreground">
+            {dict.sections.connect}
+          </h2>
+          <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[15px]">
+            <li>
+              <a href={`mailto:${dict.connect.email}`} className="text-link">
+                {dict.connect.emailLabel}
+              </a>
+            </li>
+            <li>
+              <a
+                href={dict.connect.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                {dict.connect.githubLabel}
+              </a>
+            </li>
+            <li>
+              <a
+                href={dict.connect.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                {dict.connect.linkedinLabel}
+              </a>
+            </li>
+          </ul>
+        </section>
+      </div>
     </main>
   );
 }
